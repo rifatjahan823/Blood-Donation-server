@@ -17,13 +17,10 @@ async function run() {
       const membersCollection = client.db("donar").collection("members");
       const userCollection = client.db("users").collection("user");
 
-
 // /******verifyAddmin ********/
 const verifyAdmin=async(req,res,next)=>{
   const requerster = req.query.email;
-console.log(requerster)
   const requersterAccount = await userCollection.findOne({email:requerster});
-  console.log(requersterAccount)
   if(requersterAccount?.role==='admin'){
 next();
   }else{
@@ -52,7 +49,7 @@ app.put('/verifyUsers',verifyAdmin,async(req,res)=>{
  })
 
 /******delete user by email********/
-app.delete('/removeUser',async(req,res)=>{
+app.delete('/removeUser',verifyAdmin,async(req,res)=>{
   const email = req.body.email;
   const query = {email:email}
   const result = await userCollection.deleteOne(query);
@@ -76,7 +73,6 @@ app.delete('/removeuser/:email',verifyAdmin,async(req,res)=>{
   const result = await userCollection.deleteOne(query);
   return res.send(result);
 })
-
 
 /******get member information sent backend********/
 app.post('/member',async(req,res)=>{
