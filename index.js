@@ -77,7 +77,8 @@ app.delete('/removeuser/:email',verifyAdmin,async(req,res)=>{
 /******get member information sent backend********/
 app.post('/member',async(req,res)=>{
     const members = req.body;
-    const exist = await membersCollection.findOne({email:members.eamil})
+   
+    const exist = await membersCollection.findOne({email:members.email})
     if(!exist){
       const result = await  membersCollection.insertOne(members );
        return res.send(result)
